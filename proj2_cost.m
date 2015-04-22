@@ -137,7 +137,7 @@ y_soln = x((ngates+1):(2*ngates));
 
 
 fd = fopen(outfile,'w');
-fprintf(fd,'%d %f %f\n',[ 1:size(x_soln,1) ; x_soln'; y_soln'])
+fprintf(fd,'%d %f %f\n',[ 1:size(x_soln,1) ; x_soln'; y_soln']);
 fclose(fd);
 
 
