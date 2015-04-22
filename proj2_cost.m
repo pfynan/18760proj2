@@ -90,7 +90,7 @@ delta_0=delta_new;
 fp = F;
 %ftol is a convergence tolerance
 ftol=1.e-7;
-ITERMAX = 50;
+ITERMAX = 10000;
 %Don't worry too much about this
 EPS=1.e-10;
 

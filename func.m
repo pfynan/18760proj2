@@ -48,16 +48,14 @@ for i = 1:ngates
 end
 capacity = sum(area)/ngrids; % TODO Verify
 K = zeros(ngates,length(gridx),length(gridy));
-for gx = 1:length(gridx)
-    for gy = 1:length(gridy)
-        for i = 1:ngates        
-            % i.e. poterntial(c,g)
-            K(i,gx,gy) = (area(i)*(potential((abs(cellx(i) - gridx(gx))),r))*(potential((abs(celly(i) - gridy(gy))),r))/(r^2) - capacity)^2;
-        end
-    end
-end
 
-cost2 = sum(sum(sum(K))); % Second part of cost function - Overlap Minimization
+[gx,gy,i] = ndgrid(gridx,gridy,1:ngates);
+
+
+K = (area(i(:))/(r^2).*potential2(cellx(i(:)),celly(i(:)),gx(:),gy(:),r) - capacity).^2;
+
+
+cost2 = sum(K); % Second part of cost function - Overlap Minimization
         
 left = 0;
 right = chipx;
