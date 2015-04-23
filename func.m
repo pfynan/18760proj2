@@ -6,7 +6,7 @@ r = 2; % Another MAGIC parameter % alpha = gridlength*radius
 alpha = r*gridlength; % Half Perimeter Wirelength MAGIC parameter % alpha = gridlength*radius
 wwl= 3.0658e+03;
 wd = 1;
-wb = 0;
+wb = 1;
 
 ngates = state.ngates;
 chipx = state.chipx;
