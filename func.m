@@ -1,8 +1,10 @@
 function [TotalCost] = func(X,state)
 
-alpha = 10; % Half Perimeter Wirelength MAGIC parameter % alpha = gridlength*radius
-gridlength = 5; % Second MAGIC parameter % alpha = gridlength*radius
+
+gridlength = 20; % Second MAGIC parameter % alpha = gridlength*radius
 r = 2; % Another MAGIC parameter % alpha = gridlength*radius
+alpha = r*gridlength; % Half Perimeter Wirelength MAGIC parameter % alpha = gridlength*radius
+wwl=1.5390e+05;
 
 ngates = state.ngates;
 chipx = state.chipx;
@@ -68,17 +70,20 @@ PenaltyBottom = zeros(ngates,1);
 for i = 1:ngates
     if (cellx(i) < left)
         PenaltyLeft(i) = ((cellx(i) - left)/alpha)^2;
-    elseif (cellx(i) > right)
+    end
+    if (cellx(i) > right)
         PenaltyRight(i) = ((cellx(i) - right)/alpha)^2;
-    elseif (celly(i) < bottom)
+    end
+    if (celly(i) < bottom)
         PenaltyBottom(i) = ((celly(i) - bottom)/alpha)^2;
-    elseif (celly(i) > top)
+    end
+    if (celly(i) > top)
         PenaltyTop(i) = ((celly(i) - top)/alpha)^2;
     end
 end
 
 cost3 = sum(sum(PenaltyLeft) + sum(PenaltyRight) + sum(PenaltyTop) + sum(PenaltyBottom));
-TotalCost = cost1+cost2+cost3;
+TotalCost = (wwl)*cost1+cost2+cost3;
 % Add weights
 
 end
