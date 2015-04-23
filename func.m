@@ -1,8 +1,12 @@
 function [TotalCost] = func(X,state)
 
-alpha = 10; % Half Perimeter Wirelength MAGIC parameter % alpha = gridlength*radius
-gridlength = 5; % Second MAGIC parameter % alpha = gridlength*radius
+
+gridlength = 10; % Second MAGIC parameter % alpha = gridlength*radius
 r = 2; % Another MAGIC parameter % alpha = gridlength*radius
+alpha = r*gridlength; % Half Perimeter Wirelength MAGIC parameter % alpha = gridlength*radius
+wwl= 3.0658e+03;
+wd = 1;
+wb = 1;
 
 ngates = state.ngates;
 chipx = state.chipx;
@@ -48,16 +52,14 @@ for i = 1:ngates
 end
 capacity = sum(area)/ngrids; % TODO Verify
 K = zeros(ngates,length(gridx),length(gridy));
-for gx = 1:length(gridx)
-    for gy = 1:length(gridy)
-        for i = 1:ngates        
-            % i.e. poterntial(c,g)
-            K(i,gx,gy) = (area(i)*(potential((abs(cellx(i) - gridx(gx))),r))*(potential((abs(celly(i) - gridy(gy))),r))/(r^2) - capacity)^2;
-        end
-    end
-end
 
-cost2 = sum(sum(sum(K))); % Second part of cost function - Overlap Minimization
+[gx,gy,i] = ndgrid(gridx,gridy,1:ngates);
+
+
+K = (area(i(:))/(r^2).*potential2(cellx(i(:)),celly(i(:)),gx(:),gy(:),r) - capacity).^2;
+
+
+cost2 = sum(K); % Second part of cost function - Overlap Minimization
         
 left = 0;
 right = chipx;
@@ -70,17 +72,20 @@ PenaltyBottom = zeros(ngates,1);
 for i = 1:ngates
     if (cellx(i) < left)
         PenaltyLeft(i) = ((cellx(i) - left)/alpha)^2;
-    elseif (cellx(i) > right)
+    end
+    if (cellx(i) > right)
         PenaltyRight(i) = ((cellx(i) - right)/alpha)^2;
-    elseif (celly(i) < bottom)
+    end
+    if (celly(i) < bottom)
         PenaltyBottom(i) = ((celly(i) - bottom)/alpha)^2;
-    elseif (celly(i) > top)
+    end
+    if (celly(i) > top)
         PenaltyTop(i) = ((celly(i) - top)/alpha)^2;
     end
 end
 
-cost3 = sum(sum(PenaltyLeft) + sum(PenaltyRight) + sum(PenaltyTop) + sum(PenaltyBottom));
-TotalCost = cost1+cost2+cost3;
+cost3 = sum(PenaltyLeft) + sum(PenaltyRight) + sum(PenaltyTop) + sum(PenaltyBottom);
+TotalCost = (wwl)*cost1+(wd)*cost2+(wb)*cost3;
 % Add weights
 
 end
