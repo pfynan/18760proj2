@@ -90,7 +90,7 @@ delta_0=delta_new;
 fp = F;
 %ftol is a convergence tolerance
 ftol=1.e-7;
-ITERMAX = 2;
+ITERMAX = 10000;
 %Don't worry too much about this
 EPS=1.e-10;
 
@@ -98,9 +98,9 @@ for iter = 1 : ITERMAX
 
 %Doing the line search here. First bracket a minimum, then use Golden section to find it.
 %Not using Newton-Raphson as in Shewchuk. So you don't need the second derivative.
-fprintf(1,'mnbrak');
+  % fprintf(1,'mnbrak\n');
   [ax,bx,cx,fa,fb,fc] = func_mnbrak(0,1,x,d,state);
-  fprintf(1,'golden');
+  % fprintf(1,'golden\n');
   [xt,golden] = func_golden(ax,bx,cx,x,d,state);
 %To recover vector x, which is along d at xt away from initial x.
    x = x + xt.*d;

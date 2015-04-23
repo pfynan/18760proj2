@@ -1,10 +1,12 @@
 function [TotalCost] = func(X,state)
 
 
-gridlength = 20; % Second MAGIC parameter % alpha = gridlength*radius
+gridlength = 10; % Second MAGIC parameter % alpha = gridlength*radius
 r = 2; % Another MAGIC parameter % alpha = gridlength*radius
 alpha = r*gridlength; % Half Perimeter Wirelength MAGIC parameter % alpha = gridlength*radius
-wwl=1.5390e+05;
+wwl= 3.0658e+03;
+wd = 1;
+wb = 0;
 
 ngates = state.ngates;
 chipx = state.chipx;
@@ -82,8 +84,8 @@ for i = 1:ngates
     end
 end
 
-cost3 = sum(sum(PenaltyLeft) + sum(PenaltyRight) + sum(PenaltyTop) + sum(PenaltyBottom));
-TotalCost = (wwl)*cost1+cost2+cost3;
+cost3 = sum(PenaltyLeft) + sum(PenaltyRight) + sum(PenaltyTop) + sum(PenaltyBottom);
+TotalCost = (wwl)*cost1+(wd)*cost2+(wb)*cost3;
 % Add weights
 
 end
